@@ -23,9 +23,9 @@ def get_blogs():
 
 @app.route('/deleteBlog/<id>', methods=['DELETE'])
 def delete_blog(id):
-    return_id = blogs_dao.delete_blog(connection, id)
+    result_id = blogs_dao.delete_blog(connection, id)
     response = jsonify({
-        'blog_id': return_id
+        'blog_id': result_id
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
@@ -48,7 +48,8 @@ def edit_blog():
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('./templates/js', path)
+    js_folder_path= './templates/js'
+    return send_from_directory(js_folder_path, path)
 
 
 

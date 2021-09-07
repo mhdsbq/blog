@@ -3,13 +3,10 @@ import datetime
 
 def get_all_blogs(connection):
     cursor = connection.cursor()
-
     query = ("SELECT blog_id, title, body, datetime FROM blogs")
-
     cursor.execute(query)
 
     response = []
-
     for (blog_id, title, body, datetime) in cursor:
         response.append(
             {
@@ -24,10 +21,9 @@ def get_all_blogs(connection):
 
 def get_blog_by_id(connection, blog_id):
     cursor = connection.cursor()
-
     query = (f"SELECT blog_id, title, body, datetime FROM blogs where blog_id={blog_id}")
-
     cursor.execute(query)
+
     response = []
     for (blog_id, title, body, datetime) in cursor:
         response.append(
@@ -48,26 +44,31 @@ def insert_new_blog(connection, blog):
              "VALUES (%s, %s, %s)")
 
     data = (blog['title'], blog['body'], datetime.datetime.today())
-
     cursor.execute(query, data)
     connection.commit()
-    return get_blog_by_id(connection, blog_id = cursor.lastrowid)
+
+    inserted_blog_id = cursor.lastrowid
+    response = get_blog_by_id(connection, blog_id=inserted_blog_id) 
+
+    return response
 
 def delete_blog(connection, blog_id):
     cursor = connection.cursor()
     query = (f"DELETE FROM blogs where blog_id={blog_id}")
     cursor.execute(query)
     connection.commit()
-
-    return cursor.lastrowid 
+    
+    response = blog_id
+    return response
 
 def update_blog_by_id(connection, blog):
     cursor = connection.cursor()
-
     query =(f"UPDATE blogs SET title='{blog['title']}', body='{blog['body']}' WHERE blog_id ='{blog['blog_id']}'")
     cursor.execute(query)
     connection.commit()
-    return (blog['blog_id'])
+
+    response = blog['blog_id']
+    return response
     
 
 if __name__ == "__main__":
@@ -90,4 +91,4 @@ if __name__ == "__main__":
 
     # print(get_blog_by_id(connection, 7))
 
-    print(update_blog_by_id(connection))
+    # print(update_blog_by_id(connection))
